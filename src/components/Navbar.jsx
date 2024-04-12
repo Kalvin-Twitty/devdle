@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="flex items-center justify-between bg-teal-500 p-6">
-        <span className="font-semibold text-xl tracking-tight text-white">Devdle</span>
+        <span className="font-semibold text-xl tracking-tight text-white">Codele</span>
         <FaBars
           className="text-white cursor-pointer"
           size={24}

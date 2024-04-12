@@ -25,7 +25,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4 flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-4">Welcome to Devdle</h1>
+      <h1 className="text-4xl font-bold mb-4">Welcome to Devle</h1>
       <section className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-3xl">
         <h2 className="text-3xl font-semibold mb-3">Patch Notes:</h2>
         <article className="space-y-2">
