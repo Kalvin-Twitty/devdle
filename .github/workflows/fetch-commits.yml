@@ -6,22 +6,22 @@ on:
       - main
 
 jobs:
-  fetch-commits:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-
-      - name: Fetch Commits
-        run: node Scripts/fetchCommits.js
-
-      - name: Deploy to Firebase
-        run: firebase deploy --only firestore --token ${{ secrets.FIREBASE_TOKEN }}
+      fetch-commits:
+          runs-on: ubuntu-latest
+          steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+      
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                node-version: '18'  # Updated from 14 to 18
+      
+            - name: Install Firebase CLI
+              run: npm install -g firebase-tools
+      
+            - name: Fetch Commits
+              run: node Scripts/fetchCommits.js
+      
+            - name: Deploy to Firebase
+              run: firebase deploy --only firestore --token ${{ secrets.FIREBASE_TOKEN }}
