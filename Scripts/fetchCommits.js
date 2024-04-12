@@ -1,7 +1,7 @@
 // Import necessary modules
-const fetch = require('node-fetch');
-const admin = require('firebase-admin');
-const dotenv = require('dotenv');
+import fetch from 'node-fetch';
+import admin from 'firebase-admin';
+import dotenv from 'dotenv';
 
 // Load environment variables from .env file
 dotenv.config();
