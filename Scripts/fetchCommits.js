@@ -1,5 +1,5 @@
 // Import necessary modules
-import fetch from 'isomorphic-fetch';
+import fetch from 'node-fetch';
 import admin from 'firebase-admin';
 import dotenv from 'dotenv';
 
