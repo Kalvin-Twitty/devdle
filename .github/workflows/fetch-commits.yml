@@ -15,13 +15,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '18'  # Specify Node.js version
 
       - name: Install dependencies
         run: npm install
 
       - name: Fetch Commits
-        run: node Scripts/fetchCommits.js
+        env:  # Define necessary environment variables here
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node Scripts/fetchCommits.js  # Run the script to fetch and store commits
 
       - name: Deploy to Firebase
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: npx firebase-tools deploy --only firestore --token ${{ secrets.FIREBASE_TOKEN }}

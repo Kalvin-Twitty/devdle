@@ -6,15 +6,18 @@ import dotenv from 'dotenv';
 // Load environment variables from .env file
 dotenv.config();
 
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') // Firebase private key needs to be parsed correctly
-  }),
-});
+if (!process.env.FIREBASE_PRIVATE_KEY) {
+  console.error("FIREBASE_PRIVATE_KEY environment variable is not set.");
+  process.exit(1); // Exit the process with an error code
+}
 
+admin.initializeApp({
+credential: admin.credential.cert({
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+}),
+});
 const db = admin.firestore();
 
 // GitHub repository information
