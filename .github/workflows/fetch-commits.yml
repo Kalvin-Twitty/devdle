@@ -21,7 +21,7 @@ jobs:
         run: npm install -g firebase-tools
 
       - name: Fetch Commits
-        run: node fetchCommits.js
+        run: node Scripts/fetchCommits.js
 
       - name: Deploy to Firebase
         run: firebase deploy --only firestore --token ${{ secrets.FIREBASE_TOKEN }}
