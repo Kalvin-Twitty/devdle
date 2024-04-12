@@ -1,9 +1,27 @@
-// src/pages/HomePage.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { getFirestore, collection, getDocs, orderBy, query } from 'firebase/firestore';
 
 const HomePage = () => {
   const { userDocumentId } = useAuth();
+  const [patchNotes, setPatchNotes] = useState([]);
+
+  useEffect(() => {
+    const fetchPatchNotes = async () => {
+      const db = getFirestore();
+      const q = query(collection(db, 'commits'), orderBy('timestamp', 'desc'));
+      const querySnapshot = await getDocs(q);
+      const notes = querySnapshot.docs.map(doc => ({
+        timestamp: new Date(doc.data().timestamp).toLocaleString(),
+        sha: doc.data().sha,
+        message: doc.data().message,
+        author: doc.data().author,
+      }));
+      setPatchNotes(notes);
+    };
+
+    fetchPatchNotes();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4 flex flex-col items-center justify-center">
@@ -11,11 +29,15 @@ const HomePage = () => {
       <section className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-3xl">
         <h2 className="text-3xl font-semibold mb-3">Patch Notes:</h2>
         <article className="space-y-2">
-          <p><span className="font-bold">Update 1.2.0:</span> Added new features to the Daily Challenge.</p>
-          <p><span className="font-bold">Update 1.1.5:</span> Improved leaderboard functionality.</p>
-          <p><span className="font-bold">Update 1.1.0:</span> Launched Weekly and Monthly Challenges.</p>
-          {/* Add more patch notes here */}
-        </article>
+         {patchNotes.map(note => (
+          <div key={note.message}>
+          <p className="font-bold">{note.sha.slice(0, 7)}:</p>
+          <p>{note.message}</p>
+          <p className="text-sm italic">Author: {note.author}, Date: {note.timestamp}</p>
+          <hr className="my-2" />
+        </div>
+  ))}
+</article>
       </section>
       <footer className="mt-6">
         {userDocumentId ? (

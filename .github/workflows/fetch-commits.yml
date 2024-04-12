@@ -1,0 +1,27 @@
+name: Fetch Commits and Store in Firestore
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  fetch-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Fetch Commits
+        run: node fetchCommits.js
+
+      - name: Deploy to Firebase
+        run: firebase deploy --only firestore --token ${{ secrets.FIREBASE_TOKEN }}
