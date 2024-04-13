@@ -22,11 +22,12 @@ const SignInPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="text-center">
-        <h1 className="text-4xl text-white font-bold mb-8">Welcome to Codele</h1>
+      <div className="rounded-lg p-8 shadow-lg bg-gray-800 text-center max-w-sm w-full">
+        <h1 className="text-4xl text-teal-400 font-bold mb-6">Welcome to Codele</h1>
+        <p className="text-white mb-6">The best place to sharpen your coding skills daily!</p>
         <button
           onClick={signIn}
-          className="text-white bg-teal-500 hover:bg-teal-700 font-semibold py-2 px-4 border border-teal-700 rounded shadow mb-4"
+          className="text-white bg-teal-500 hover:bg-teal-600 font-semibold py-2 px-6 border border-teal-600 rounded shadow mb-4 w-full transition duration-300 ease-in-out transform hover:-translate-y-1"
         >
           Sign in with Google
         </button>
@@ -40,5 +41,4 @@ const SignInPage = () => {
     </div>
   );
 };
-
 export default SignInPage;
