@@ -25,9 +25,15 @@ const ProfilePage = () => {
   }
 
   return (
-    <div>
-      <h1>Profile Page</h1>
-      <h2>Hello, {userProfile.displayName}</h2>
+    <div className="min-h-screen bg-gray-900 text-white p-4 flex flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-4">Profile Page</h1>
+      <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-3xl">
+        <div className="flex items-center mb-4">
+          <img src={userProfile.photoURL} alt="Profile" className="w-12 h-12 rounded-full mr-4" />
+          <h2 className="text-2xl font-semibold">{userProfile.displayName}</h2>
+        </div>
+        <p className="text-gray-300 mb-2">Email: {userProfile.email}</p>
+      </div>
     </div>
   );
 };
