@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
-    "@picocss/pico": "^2.0.6",
     "dotenv": "^16.4.5",
     "firebase": "^10.10.0",
     "firebase-admin": "^12.0.0",
