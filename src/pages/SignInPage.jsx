@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 const SignInPage = () => {
-  const { signIn, signInAnonymously, currentUser } = useAuth();
+  const { signIn, currentUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -11,14 +11,6 @@ const SignInPage = () => {
       navigate('/home');
     }
   }, [currentUser, navigate]);
-
-  const handleAnonymousSignIn = async () => {
-    try {
-      await signInAnonymously();
-    } catch (error) {
-      console.error("Error during anonymous sign-in:", error);
-    }
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
@@ -30,12 +22,6 @@ const SignInPage = () => {
           className="text-white bg-teal-500 hover:bg-teal-600 font-semibold py-2 px-6 border border-teal-600 rounded shadow mb-4 w-full transition duration-300 ease-in-out transform hover:-translate-y-1"
         >
           Sign in with Google
-        </button>
-        <button
-          onClick={handleAnonymousSignIn}
-          className="text-white bg-gray-700 hover:bg-gray-800 font-semibold py-2 px-4 border border-gray-800 rounded shadow"
-        >
-          Continue Anonymously
         </button>
       </div>
     </div>
