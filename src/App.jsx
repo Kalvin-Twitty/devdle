@@ -14,7 +14,6 @@ import WordList from './components/WordList';
 import PrivateRoute from './routes/PrivateRoute';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
-import "@picocss/pico";
 
 const App = () => {
   return (
