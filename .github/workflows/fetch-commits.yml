@@ -1,4 +1,4 @@
-name: Fetch Commits and Store in Firestore
+name: Fetch Commits and Store in Firestore and Cleanup Anonymous Users
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  fetch-commits:
+  fetch-commits-and-cleanup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -15,16 +15,22 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'  # Specify Node.js version
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
       - name: Fetch Commits
-        env:  # Define necessary environment variables here
+        env:
           FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node Scripts/fetchCommits.js  # Run the script to fetch and store commits
-        
+        run: node Scripts/fetchCommits.js
+
+      - name: Cleanup Anonymous Users
+        env:
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+        run: node Scripts/cleanupAnonymousUsers.js

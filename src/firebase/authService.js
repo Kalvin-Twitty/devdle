@@ -1,35 +1,56 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut as firebaseSignOut } from 'firebase/auth'; // Added getRedirectResult and firebaseSignOut
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
+  signOut as firebaseSignOut,
+  signInAnonymously as firebaseSignInAnonymously
+} from 'firebase/auth';
 import app from './firebaseConfig';
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth(app); // Pass the Firebase app instance to getAuth
+export const auth = getAuth(app); // Get and export the authentication object
 
+// Initiates sign-in with Google using redirect
 export const signInWithGoogle = () => {
-  // Initiates sign-in with redirect
   signInWithRedirect(auth, provider);
 };
 
+// Handles the results from the redirect sign-in
 export const handleRedirectResult = async () => {
   try {
     const result = await getRedirectResult(auth);
-    if (result) {
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      // The signed-in user info is now available
-      return result.user; // Return the user object for further processing
+    if (result && result.user) {
+      return result.user; // Returns the user object from Firebase Auth
+    } else {
+      // Handle the case where no user is returned
+      console.log("No user from redirect, likely not logged in");
+      return null;
     }
   } catch (error) {
-    // Handle Errors here.
     console.error("Error handling redirect result:", error);
-    throw error; // Rethrow or handle errors appropriately
+    throw error;
   }
 };
 
-export const signOut = () => {
-  firebaseSignOut(auth).then(() => {
-    // Sign-out successful.
-    // Update UI or redirect as needed
-  }).catch((error) => {
-    // An error happened during sign-out.
+// Signs out the current user
+export const signOut = async () => {
+  try {
+    await firebaseSignOut(auth);
+    console.log("Sign-out successful.");
+  } catch (error) {
     console.error("Error during sign-out:", error);
-  });
+  }
+};
+
+// Signs in a user anonymously
+export const signInAnonymously = async () => {
+  try {
+    const result = await firebaseSignInAnonymously(auth);
+    return result; // Assuming you want to return the result object
+  } catch (error) {
+    console.error("Error signing in anonymously:", error);
+    throw error;
+  }
 };

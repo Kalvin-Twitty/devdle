@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import app from '../firebase/firebaseConfig';
-import { signInWithGoogle, signOut, handleRedirectResult } from '../firebase/authService';
+import { signInWithGoogle, signOut, handleRedirectResult, signInAnonymously as firebaseSignInAnonymously, auth } from '../firebase/authService'; // Import 'auth' here
 import { addNewUserWithDisplayNameCheck } from '../firebase/userService';
 
 const AuthContext = createContext();
@@ -9,8 +8,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [userDocumentId, setUserDocumentId] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false); // State to track if the current user is an admin
-  const [loading, setLoading] = useState(true); // Initialize loading state
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const processRedirect = async () => {
@@ -20,10 +19,7 @@ export const AuthProvider = ({ children }) => {
           const db = getFirestore(app);
           const userDocRef = doc(db, 'users', user.uid);
           const userDoc = await getDoc(userDocRef);
-
-          console.log("User document exists:", userDoc.exists());
-          console.log("User admin status:", userDoc.data()?.admin);
-
+    
           if (!userDoc.exists()) {
             await addNewUserWithDisplayNameCheck(user.uid, {
               displayName: user.displayName,
@@ -35,21 +31,39 @@ export const AuthProvider = ({ children }) => {
           } else {
             setIsAdmin(false);
           }
-
+    
           setCurrentUser(user);
           setUserDocumentId(user.uid);
-          console.log("Current user:", user);
-          console.log("Is admin:", userDoc.data()?.admin === true);
+        } else {
+          console.log("No user from redirect, likely not logged in");
         }
       } catch (error) {
         console.error("Error during auth redirect process:", error);
       } finally {
-        setLoading(false); // Ensure loading is set to false after the process
+        setLoading(false);
       }
     };
 
     processRedirect();
   }, []);
+
+  const signInAnonymously = async () => {
+    setLoading(true);
+    try {
+      const result = await firebaseSignInAnonymously(auth); // Use 'auth' directly here
+      if (result && result.user) {
+        setCurrentUser(result.user);
+        setUserDocumentId(result.user.uid);
+        console.log("Signed in anonymously", result.user);
+      } else {
+        console.log("No user data returned on anonymous sign-in.");
+      }
+    } catch (error) {
+      console.error("Error signing in anonymously:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const signIn = async () => {
     await signInWithGoogle();
@@ -61,16 +75,16 @@ export const AuthProvider = ({ children }) => {
     setIsAdmin(false);
     setUserDocumentId(null);
     setLoading(true);
-    console.log("User signed out");
   };
 
   const value = {
     currentUser,
     userDocumentId,
     isAdmin,
-    loading, // Include loading state in the context value
+    loading,
     signIn,
     signOut: handleSignOut,
+    signInAnonymously,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
