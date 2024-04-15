@@ -35,8 +35,6 @@ const Navbar = () => {
         <div className="p-5">
           <Link to="/home" className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>Home</Link>
           <Link to="/game/daily" className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>Daily Challenge</Link>
-          <Link to="/game/weekly" className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>Weekly Challenge</Link>
-          <Link to="/game/monthly" className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>Monthly Challenge</Link>
           <Link to="/leaderboard" className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>Leaderboard</Link>
           <Link to="/history" className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>History</Link>
           <Link to={`/profile/${userDocumentId}`} className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>Profile</Link>
@@ -47,6 +45,8 @@ const Navbar = () => {
           >
             Close Menu
           </button>
+          {/*       <Link to="/game/weekly" className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>Weekly Challenge</Link>
+          <Link to="/game/monthly" className="block mobile-nav-link text-white" onClick={() => setIsMenuOpen(false)}>Monthly Challenge</Link>*/}
         </div>
       </motion.aside>
 
