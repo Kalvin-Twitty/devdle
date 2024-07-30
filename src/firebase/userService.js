@@ -1,5 +1,5 @@
 import { getAuth, updateProfile } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, query, where, getDocs, collection } from 'firebase/firestore';
 import app from './firebaseConfig';
 
 // Function to update the user's display name in both Firebase Auth and Firestore

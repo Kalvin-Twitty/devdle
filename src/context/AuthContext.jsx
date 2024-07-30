@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import app from '../firebase/firebaseConfig';
-import { signInWithGoogle, signOut, handleRedirectResult } from '../firebase/authService';
+import { signInWithEmailAndPassword, signOut } from '../firebase/authService';
 import { addNewUserWithDisplayNameCheck } from '../firebase/userService';
 
 const AuthContext = createContext();
@@ -15,32 +15,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const processRedirect = async () => {
       try {
-        const user = await handleRedirectResult();
-        if (user) {
-          const db = getFirestore(app);
-          const userDocRef = doc(db, 'users', user.uid);
-          const userDoc = await getDoc(userDocRef);
-
-          console.log("User document exists:", userDoc.exists());
-          console.log("User admin status:", userDoc.data()?.admin);
-
-          if (!userDoc.exists()) {
-            await addNewUserWithDisplayNameCheck(user.uid, {
-              displayName: user.displayName,
-              email: user.email,
-              photoURL: user.photoURL,
-            });
-          } else if (userDoc.data()?.admin === true) {
-            setIsAdmin(true);
-          } else {
-            setIsAdmin(false);
-          }
-
-          setCurrentUser(user);
-          setUserDocumentId(user.uid);
-          console.log("Current user:", user);
-          console.log("Is admin:", userDoc.data()?.admin === true);
-        }
+        // Handle redirect result if needed
       } catch (error) {
         console.error("Error during auth redirect process:", error);
       } finally {
@@ -51,17 +26,28 @@ export const AuthProvider = ({ children }) => {
     processRedirect();
   }, []);
 
-  const signIn = async () => {
-    await signInWithGoogle();
+  const signIn = async (email, password) => {
+    try {
+      const user = await signInWithEmailAndPassword(email, password);
+      setCurrentUser(user);
+      // Add additional logic if needed
+    } catch (error) {
+      console.error("Error during sign in:", error);
+      throw error;
+    }
   };
 
   const handleSignOut = async () => {
-    await signOut();
-    setCurrentUser(null);
-    setIsAdmin(false);
-    setUserDocumentId(null);
-    setLoading(true);
-    console.log("User signed out");
+    try {
+      await signOut();
+      setCurrentUser(null);
+      setIsAdmin(false);
+      setUserDocumentId(null);
+      setLoading(true);
+      console.log("User signed out");
+    } catch (error) {
+      console.error("Error during sign out:", error);
+    }
   };
 
   const value = {
